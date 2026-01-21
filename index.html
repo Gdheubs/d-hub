@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VideoStream</title>
+    <title>DesiHub - Premium Videos</title>
     <style>
         * {
             margin: 0;
@@ -17,7 +17,6 @@
             color: #fff;
         }
 
-        /* Header */
         .header {
             background: #1a1a1a;
             border-bottom: 1px solid #2a2a2a;
@@ -64,7 +63,6 @@
             background: #333;
         }
 
-        /* Ad Banner */
         .ad-banner {
             background: linear-gradient(135deg, #ff6b6b, #ff9000);
             padding: 15px;
@@ -73,7 +71,6 @@
             font-weight: 500;
         }
 
-        /* Main Container */
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -83,7 +80,6 @@
             gap: 20px;
         }
 
-        /* Video Grid */
         .video-section {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -153,7 +149,6 @@
             font-size: 13px;
         }
 
-        /* Sidebar Ads */
         .sidebar {
             position: sticky;
             top: 80px;
@@ -194,7 +189,6 @@
             border: 2px dashed #333;
         }
 
-        /* Pop-up Ad */
         .popup-ad {
             position: fixed;
             top: 50%;
@@ -264,7 +258,6 @@
             width: 100%;
         }
 
-        /* Video Modal */
         .modal {
             display: none;
             position: fixed;
@@ -312,7 +305,6 @@
             width: 100%;
         }
 
-        /* Video Ad Banner Above Player */
         .video-ad-banner {
             background: linear-gradient(135deg, #667eea, #764ba2);
             padding: 20px;
@@ -392,7 +384,6 @@
             font-size: 14px;
         }
 
-        /* Bottom Video Ad */
         .video-ad-bottom {
             background: linear-gradient(135deg, #f093fb, #f5576c);
             padding: 20px;
@@ -407,7 +398,6 @@
             transform: scale(1.02);
         }
 
-        /* Recommended Videos Sidebar */
         .recommended-section {
             background: #1a1a1a;
             border-radius: 12px;
@@ -483,7 +473,6 @@
             font-size: 12px;
         }
 
-        /* Responsive */
         @media (max-width: 1200px) {
             .modal-content {
                 grid-template-columns: 1fr;
@@ -516,22 +505,19 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
     <div class="header">
         <div class="header-content">
-            <div class="logo">VideoStream</div>
+            <div class="logo">DesiHub</div>
             <div class="search-bar">
                 <input type="text" placeholder="Search videos...">
             </div>
         </div>
     </div>
 
-    <!-- Ad Banner -->
     <div class="ad-banner">
         ⭐ Premium Ad Space - Reach millions of viewers daily
     </div>
 
-    <!-- Pop-up Ad Overlay -->
     <div class="popup-overlay" id="popupOverlay"></div>
     <div class="popup-ad" id="popupAd">
         <button class="popup-close" onclick="closePopupAd()">&times;</button>
@@ -540,12 +526,9 @@
         <button class="popup-cta" onclick="closePopupAd()">Claim Offer Now</button>
     </div>
 
-    <!-- Main Container -->
     <div class="container">
-        <!-- Video Grid -->
         <div class="video-section" id="videoGrid"></div>
 
-        <!-- Sidebar Ads -->
         <div class="sidebar">
             <div class="ad-box">
                 <h3>Sponsored</h3>
@@ -564,12 +547,10 @@
         </div>
     </div>
 
-    <!-- Video Modal -->
     <div class="modal" id="videoModal">
         <button class="close-modal" onclick="closeVideo()">&times;</button>
         <div class="modal-content">
             <div class="player-section">
-                <!-- Ad Banner Above Video -->
                 <div class="video-ad-banner" onclick="showPopupAd()">
                     <h3>🎯 Advertisement</h3>
                     <p>Click here for exclusive deals!</p>
@@ -587,14 +568,12 @@
                     <p class="description" id="modalDesc"></p>
                 </div>
 
-                <!-- Ad Banner Below Video -->
                 <div class="video-ad-bottom" onclick="showPopupAd()">
                     <h3>💎 Premium Offer</h3>
                     <p>Click to unlock special features!</p>
                 </div>
             </div>
 
-            <!-- Recommended Videos -->
             <div class="recommended-section">
                 <h3>Recommended</h3>
                 <div id="recommendedVideos"></div>
@@ -603,27 +582,28 @@
     </div>
 
     <script>
-        // ADMIN: Replace with your real videos
-        // Upload videos to: Google Drive, Dropbox, Vimeo, or your hosting server
-        // Get direct video links and paste them in the 'url' field below
-        
         const videos = [
             {
-                title: "Your Video Title Here",
-                description: "Your video description here. Make it engaging!",
-                url: "https://your-video-hosting.com/video1.mp4", // Replace with real video URL
+                title: "Sample Video 1 - Replace with Your Content",
+                description: "This is a sample video. Edit the code to add your real videos!",
+                url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
                 views: "1.2K",
                 duration: "10:24"
+            },
+            {
+                title: "Sample Video 2 - Replace with Your Content",
+                description: "Another sample video. Replace the URL with your video hosting link.",
+                url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                views: "856",
+                duration: "15:30"
+            },
+            {
+                title: "Sample Video 3 - Replace with Your Content",
+                description: "Sample content. Upload your videos and paste the links here.",
+                url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                views: "2.1K",
+                duration: "8:45"
             }
-            // Add more videos by copying the format above
-            // Example:
-            // {
-            //     title: "Second Video Title",
-            //     description: "Second video description",
-            //     url: "https://your-video-hosting.com/video2.mp4",
-            //     views: "856",
-            //     duration: "15:30"
-            // },
         ];
 
         let currentVideoIndex = -1;
@@ -687,7 +667,6 @@
             
             renderRecommended(index);
             
-            // Show pop-up ad after 2 seconds
             setTimeout(showPopupAd, 2000);
         }
 
@@ -712,7 +691,6 @@
             document.getElementById('popupOverlay').classList.remove('active');
         }
 
-        // Close modal on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeVideo();
@@ -720,14 +698,12 @@
             }
         });
 
-        // Close modal on background click
         document.getElementById('videoModal').addEventListener('click', (e) => {
             if (e.target.id === 'videoModal') closeVideo();
         });
 
         document.getElementById('popupOverlay').addEventListener('click', closePopupAd);
 
-        // Initialize
         renderVideos();
     </script>
 </body>
