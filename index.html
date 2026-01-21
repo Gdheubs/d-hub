@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DesiHub - Premium Videos</title>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5797733299738823"
+     crossorigin="anonymous"></script>
+
     <style>
         * {
             margin: 0;
@@ -63,26 +67,16 @@
             background: #333;
         }
 
-        .ad-banner {
-            background: linear-gradient(135deg, #ff6b6b, #ff9000);
-            padding: 15px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 20px;
+            /* Removed sidebar grid, now just full width content */
         }
 
         .video-section {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
             gap: 20px;
         }
 
@@ -149,115 +143,6 @@
             font-size: 13px;
         }
 
-        .sidebar {
-            position: sticky;
-            top: 80px;
-            height: fit-content;
-        }
-
-        .ad-box {
-            background: #1a1a1a;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            text-align: center;
-            border: 1px solid #2a2a2a;
-        }
-
-        .ad-box h3 {
-            color: #ff9000;
-            margin-bottom: 10px;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .ad-box p {
-            color: #999;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        .ad-placeholder {
-            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
-            height: 250px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 15px;
-            border: 2px dashed #333;
-        }
-
-        .popup-ad {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.8);
-            z-index: 2000;
-            max-width: 500px;
-            width: 90%;
-            display: none;
-        }
-
-        .popup-ad.active {
-            display: block;
-        }
-
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1999;
-            display: none;
-        }
-
-        .popup-overlay.active {
-            display: block;
-        }
-
-        .popup-ad h2 {
-            color: #ff9000;
-            margin-bottom: 15px;
-            font-size: 24px;
-        }
-
-        .popup-ad p {
-            color: #333;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .popup-close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            color: #999;
-        }
-
-        .popup-cta {
-            background: linear-gradient(135deg, #ff6b6b, #ff9000);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-        }
-
         .modal {
             display: none;
             position: fixed;
@@ -303,25 +188,6 @@
 
         .player-section {
             width: 100%;
-        }
-
-        .video-ad-banner {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .video-ad-banner:hover {
-            transform: scale(1.02);
-        }
-
-        .video-ad-banner h3 {
-            font-size: 18px;
-            margin-bottom: 5px;
         }
 
         .player-wrapper {
@@ -382,20 +248,6 @@
             color: #ccc;
             line-height: 1.6;
             font-size: 14px;
-        }
-
-        .video-ad-bottom {
-            background: linear-gradient(135deg, #f093fb, #f5576c);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            margin-top: 15px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .video-ad-bottom:hover {
-            transform: scale(1.02);
         }
 
         .recommended-section {
@@ -477,29 +329,14 @@
             .modal-content {
                 grid-template-columns: 1fr;
             }
-            
             .recommended-section {
                 max-height: 400px;
-            }
-        }
-
-        @media (max-width: 1024px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-            
-            .sidebar {
-                display: none;
             }
         }
 
         @media (max-width: 768px) {
             .search-bar {
                 display: none;
-            }
-            
-            .video-section {
-                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -514,48 +351,15 @@
         </div>
     </div>
 
-    <div class="ad-banner">
-        ⭐ Premium Ad Space - Reach millions of viewers daily
-    </div>
-
-    <div class="popup-overlay" id="popupOverlay"></div>
-    <div class="popup-ad" id="popupAd">
-        <button class="popup-close" onclick="closePopupAd()">&times;</button>
-        <h2>Special Offer!</h2>
-        <p>Get 50% off on premium subscription. Limited time offer. Don't miss out on exclusive content and ad-free viewing experience!</p>
-        <button class="popup-cta" onclick="closePopupAd()">Claim Offer Now</button>
-    </div>
-
     <div class="container">
         <div class="video-section" id="videoGrid"></div>
-
-        <div class="sidebar">
-            <div class="ad-box">
-                <h3>Sponsored</h3>
-                <div class="ad-placeholder">
-                    <p style="color: #666;">Advertisement</p>
-                </div>
-            </div>
-            
-            <div class="ad-box">
-                <h3>Featured</h3>
-                <p>Your brand here! Contact us for premium advertising opportunities.</p>
-                <div class="ad-placeholder">
-                    <p style="color: #666;">Ad Space</p>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="modal" id="videoModal">
         <button class="close-modal" onclick="closeVideo()">&times;</button>
         <div class="modal-content">
             <div class="player-section">
-                <div class="video-ad-banner" onclick="showPopupAd()">
-                    <h3>🎯 Advertisement</h3>
-                    <p>Click here for exclusive deals!</p>
-                </div>
-
+                
                 <div class="player-wrapper">
                     <video id="modalVideo" controls autoplay></video>
                 </div>
@@ -568,10 +372,6 @@
                     <p class="description" id="modalDesc"></p>
                 </div>
 
-                <div class="video-ad-bottom" onclick="showPopupAd()">
-                    <h3>💎 Premium Offer</h3>
-                    <p>Click to unlock special features!</p>
-                </div>
             </div>
 
             <div class="recommended-section">
@@ -666,8 +466,6 @@
             document.body.style.overflow = 'hidden';
             
             renderRecommended(index);
-            
-            setTimeout(showPopupAd, 2000);
         }
 
         function closeVideo() {
@@ -678,31 +476,17 @@
             modalVideo.src = '';
             modal.classList.remove('active');
             document.body.style.overflow = 'auto';
-            closePopupAd();
-        }
-
-        function showPopupAd() {
-            document.getElementById('popupAd').classList.add('active');
-            document.getElementById('popupOverlay').classList.add('active');
-        }
-
-        function closePopupAd() {
-            document.getElementById('popupAd').classList.remove('active');
-            document.getElementById('popupOverlay').classList.remove('active');
         }
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeVideo();
-                closePopupAd();
             }
         });
 
         document.getElementById('videoModal').addEventListener('click', (e) => {
             if (e.target.id === 'videoModal') closeVideo();
         });
-
-        document.getElementById('popupOverlay').addEventListener('click', closePopupAd);
 
         renderVideos();
     </script>
