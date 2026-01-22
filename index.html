@@ -381,12 +381,16 @@
         </div>
     </div>
 
-    <script>
+        <script>
         const videos = [
             {
                 title: "Punjabi kudi - Sucking on his boyfriend",
                 description: "Punjabi kudi sucking on his boyfriend fat cock !",
-                url: "https:www.dropbox.com/scl/fi/lbaoz7gibkpqz0z4y71u5/VID_20260122_172550_587.mp4?rlkey=onz2h0q07261hk4hx2l65pey9&st=onoczm0i&dl=0",
+                // FIXED URL:
+                // 1. Added 'https://'
+                // 2. Changed 'www.dropbox.com' to 'dl.dropboxusercontent.com' to get the raw video file
+                // 3. Kept the 'rlkey' (required for access)
+                url: "https://dl.dropboxusercontent.com/scl/fi/lbaoz7gibkpqz0z4y71u5/VID_20260122_172550_587.mp4?rlkey=onz2h0q07261hk4hx2l65pey9",
                 views: "1.4k",
                 duration: "14"
             },
@@ -399,8 +403,8 @@
             grid.innerHTML = videos.map((video, index) => `
                 <div class="video-card" onclick="openVideo(${index})">
                     <div class="video-thumbnail">
-                        <video preload="metadata">
-                            <source src="${video.url}#t=0.5" type="video/mp4">
+                        <video preload="none" poster="https://via.placeholder.com/640x360.png?text=Video+Thumbnail">
+                            <source src="${video.url}" type="video/mp4">
                         </video>
                         <div class="video-duration">${video.duration}</div>
                     </div>
@@ -422,11 +426,16 @@
                 .map((v, i) => ({...v, index: i}))
                 .filter((v, i) => i !== excludeIndex);
             
+            // If no other videos, just show the current one or nothing
+            if(recommended.length === 0 && videos.length > 0) {
+                 // Optional: logic to handle empty recommendations if you only have 1 video
+            }
+
             container.innerHTML = recommended.map(video => `
                 <div class="recommended-video" onclick="openVideo(${video.index})">
                     <div class="recommended-thumb">
-                        <video preload="metadata">
-                            <source src="${video.url}#t=0.5" type="video/mp4">
+                        <video preload="none">
+                            <source src="${video.url}" type="video/mp4">
                         </video>
                         <div class="recommended-duration">${video.duration}</div>
                     </div>
@@ -448,6 +457,21 @@
             document.getElementById('modalDesc').textContent = video.description;
             
             modalVideo.src = video.url;
+            
+            // Explicitly load and play to ensure it works after src change
+            modalVideo.load();
+            var playPromise = modalVideo.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Autoplay started!
+                })
+                .catch(error => {
+                    // Auto-play was prevented
+                    console.log("Autoplay prevented");
+                });
+            }
+
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
             
@@ -478,5 +502,6 @@
     </script>
 </body>
 </html>
+
 
 
