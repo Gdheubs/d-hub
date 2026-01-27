@@ -73,7 +73,7 @@ export default function App() {
               } />
 
               {/* Video Player Route */}
-              <Route path="/watch/:id" element={<WatchPage user={user} />} />
+              <Route path="/watch/:id" element={<VideoPlayer user={user} />} />
               
               {/* Admin Panel */}
               <Route path="/admin" element={
@@ -115,9 +115,6 @@ function HomeFeed({ isPremium }) {
     </div>
   );
 }
-
-// Helper for Watch Page
-function WatchPage({ user }) {
   // You would need to implement fetching the specific video by ID here
   // passing it to your VideoPlayer component
   return <div>Video Player Loading...</div>; 
