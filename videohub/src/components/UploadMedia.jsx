@@ -1,56 +1,97 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
+import { useNavigate } from 'react-router-dom';
 
 export default function UploadMedia({ user }) {
   const [file, setFile] = useState(null);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [type, setType] = useState('video');
   const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-    setSuccess(false);
-    setError(null);
-  };
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    if (!file || !user || !title) return;
 
-  const handleTypeChange = (e) => {
-    setType(e.target.value);
-  };
-
-  const handleUpload = async () => {
-    if (!file || !user) return;
     setUploading(true);
-    setError(null);
-    setSuccess(false);
     try {
+      // 1. Upload File to Storage
       const fileExt = file.name.split('.').pop();
-      const filePath = `${type}s/${user.id}/${Date.now()}_${file.name}`;
-      let { error: uploadError } = await supabase.storage
-        .from('media')
+      const filePath = `${type}s/${user.id}/${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('media') // Ensure you created a bucket named 'media' in Supabase Dashboard
         .upload(filePath, file);
+
       if (uploadError) throw uploadError;
-      setSuccess(true);
-    } catch (err) {
-      setError(err.message);
+
+      // 2. Get Public URL
+      const { data: urlData } = supabase.storage
+        .from('media')
+        .getPublicUrl(filePath);
+
+      // 3. Create Post Entry in Database
+      const { error: dbError } = await supabase.from('posts').insert({
+        user_id: user.id,
+        title,
+        description,
+        type,
+        media_url: urlData.publicUrl,
+        is_premium: false // Regular uploads are never premium
+      });
+
+      if (dbError) throw dbError;
+
+      navigate('/profile'); // Redirect to profile on success
+    } catch (error) {
+      alert('Error uploading: ' + error.message);
     } finally {
       setUploading(false);
     }
   };
 
   return (
-    <div className="p-4 bg-gray-800 rounded shadow">
-      <h2 className="text-lg font-bold mb-2">Upload Video or Photo</h2>
-      <select value={type} onChange={handleTypeChange} className="mb-2 p-1 rounded">
-        <option value="video">Video</option>
-        <option value="photo">Photo</option>
-      </select>
-      <input type="file" accept={type === 'video' ? 'video/*' : 'image/*'} onChange={handleFileChange} className="mb-2" />
-      <button onClick={handleUpload} disabled={uploading || !file} className="bg-blue-600 px-4 py-2 rounded text-white">
-        {uploading ? 'Uploading...' : 'Upload'}
-      </button>
-      {success && <div className="text-green-400 mt-2">Upload successful!</div>}
-      {error && <div className="text-red-400 mt-2">{error}</div>}
+    <div className="max-w-2xl mx-auto bg-gray-800 p-8 rounded-lg mt-8">
+      <h2 className="text-2xl font-bold mb-6 text-blue-400">Upload to Community</h2>
+      <form onSubmit={handleUpload} className="space-y-4">
+        <input 
+          type="text" 
+          placeholder="Title"
+          className="w-full p-2 rounded bg-gray-700 text-white"
+          value={title} 
+          onChange={e => setTitle(e.target.value)} 
+          required 
+        />
+        <textarea 
+          placeholder="Description"
+          className="w-full p-2 rounded bg-gray-700 text-white"
+          value={description} 
+          onChange={e => setDescription(e.target.value)} 
+        />
+        <select 
+          value={type} 
+          onChange={e => setType(e.target.value)}
+          className="w-full p-2 rounded bg-gray-700 text-white"
+        >
+          <option value="video">Video</option>
+          <option value="photo">Photo</option>
+        </select>
+        <input 
+          type="file" 
+          accept={type === 'video' ? 'video/*' : 'image/*'} 
+          onChange={e => setFile(e.target.files[0])}
+          className="w-full text-gray-300" 
+          required
+        />
+        <button 
+          type="submit" 
+          disabled={uploading}
+          className="w-full bg-blue-600 hover:bg-blue-700 p-3 rounded font-bold disabled:opacity-50"
+        >
+          {uploading ? 'Uploading...' : 'Publish Post'}
+        </button>
+      </form>
     </div>
   );
 }
