@@ -1,7 +1,7 @@
 {
   "name": "videohub",
   "version": "1.0.0",
-  "homepage": "https://gdheubs.github.io/d-hub",
+  "homepage": "https://desihub.online",
   "private": true,
   "dependencies": {
     "@stripe/stripe-js": "^8.6.4",
