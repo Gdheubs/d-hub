@@ -115,7 +115,3 @@ function HomeFeed({ isPremium }) {
     </div>
   );
 }
-  // You would need to implement fetching the specific video by ID here
-  // passing it to your VideoPlayer component
-  return <div>Video Player Loading...</div>; 
-}
