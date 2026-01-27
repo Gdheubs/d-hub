@@ -65,7 +65,7 @@ export default function AboutModal({ onClose }) {
                 Have questions or feedback? We'd love to hear from you!
               </p>
               <p className="mt-2">
-                Email: <span className="text-blue-400">info@videohub.online</span>
+                Email: <span className="text-blue-400">info@desihub.online</span>
               </p>
             </section>
           </div>

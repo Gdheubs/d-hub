@@ -1,21 +1,18 @@
 import React from 'react';
-import { Play, Heart, MessageCircle } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Play, Heart } from 'lucide-react';
+// MessageCircle removed
 
-export default function VideoCard({ video }) {
-  const navigate = useNavigate();
-
+export default function VideoCard({ video, onClick }) {
   return (
     <div 
-      onClick={() => navigate(`/watch/${video.id}`)}
-      className="bg-gray-800 rounded-lg overflow-hidden cursor-pointer group hover:transform hover:scale-105 transition-all duration-200"
+      onClick={onClick}
+      className="bg-gray-800 rounded-lg overflow-hidden cursor-pointer group hover:transform hover:scale-105 transition-all duration-200 shadow-lg border border-gray-700 hover:border-blue-500"
     >
       <div className="relative aspect-video bg-black">
         {video.type === 'video' ? (
           <>
-             {/* Use thumbnail if available, otherwise fallback to video element (poster) or a generic icon */}
             {video.thumbnail_url ? (
-               <img src={video.thumbnail_url} alt={video.title} className="w-full h-full object-cover" />
+               <img src={video.thumbnail_url} alt={video.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gray-900 text-gray-500">
                 <Play size={48} />
@@ -29,21 +26,20 @@ export default function VideoCard({ video }) {
           <img src={video.media_url} alt={video.title} className="w-full h-full object-cover" />
         )}
         
-        {/* Premium Badge */}
         {video.is_premium && (
-          <span className="absolute top-2 right-2 bg-yellow-500 text-black text-xs font-bold px-2 py-1 rounded">
+          <span className="absolute top-2 right-2 bg-yellow-500 text-black text-xs font-bold px-2 py-1 rounded shadow-sm">
             PREMIUM
           </span>
         )}
       </div>
 
       <div className="p-4">
-        <h3 className="font-bold text-white truncate">{video.title}</h3>
-        <div className="flex justify-between items-center mt-2 text-gray-400 text-sm">
-          <span className="flex items-center gap-1">
-            <Heart size={14} /> {video.likes || 0}
+        <h3 className="font-bold text-white truncate text-lg">{video.title}</h3>
+        <div className="flex justify-between items-center mt-3 text-gray-400 text-sm">
+          <span className="flex items-center gap-1 hover:text-red-500 transition-colors">
+            <Heart size={16} /> {video.likes || 0}
           </span>
-          <span className="text-xs">
+          <span className="text-xs bg-gray-700 px-2 py-1 rounded-full text-gray-300">
             {video.profiles?.name || 'Anonymous'}
           </span>
         </div>

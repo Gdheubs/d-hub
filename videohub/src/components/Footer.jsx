@@ -41,7 +41,7 @@ export default function Footer({ onTermsClick, onAboutClick }) {
           <div>
             <h3 className="text-lg font-bold text-white mb-4">Contact</h3>
             <p className="text-gray-400">
-              Email: <span className="text-gray-300">info@videohub.online</span>
+              Email: <span className="text-gray-300">info@desihub.online</span>
             </p>
           </div>
         </div>
