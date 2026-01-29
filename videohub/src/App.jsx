@@ -29,7 +29,7 @@ export default function App() {
   const [showTerms, setShowTerms] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
 
-  // Define loadUserData with useCallback to stabilize it for useEffect
+  // ... [Keep existing useCallback/loadUserData logic] ...
   const loadUserData = useCallback(async () => {
     if (!user) return;
     try {
@@ -38,14 +38,12 @@ export default function App() {
 
       const { data: liked } = await supabase.from('user_likes').select('video_id').eq('user_id', user.id);
       setLikedVideos(liked?.map(l => l.video_id) || []);
-      
-      // Note: Removed unused watchHistory state fetch here for performance
     } catch (error) {
       console.error('Error loading user data:', error);
     }
   }, [user]);
 
-  // 1. Fetch Posts Logic
+  // ... [Keep existing useEffect hooks for fetching posts and auth] ...
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -81,7 +79,6 @@ export default function App() {
     fetchPosts();
   }, []);
 
-  // 2. Auth Session Logic
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       setUser(session?.user ?? null);
@@ -106,9 +103,7 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // 3. Real-time Subscriptions
   useEffect(() => {
-    // Only subscribe to likes if we need to update user data
     const likesSubscription = supabase
       .channel('public:user_likes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'user_likes' }, () => {
@@ -119,12 +114,11 @@ export default function App() {
     return () => {
       supabase.removeChannel(likesSubscription);
     };
-  }, [user, loadUserData]); // Added loadUserData dependency
+  }, [user, loadUserData]);
 
-  // 4. Load User Data on change
   useEffect(() => {
     if (user) loadUserData();
-  }, [user, loadUserData]); // Added loadUserData dependency
+  }, [user, loadUserData]);
 
   const handleSelectVideo = async (video) => {
     setSelectedVideo(video);
@@ -166,9 +160,20 @@ export default function App() {
             <>
               <Header user={user} userProfile={userProfile} onLogout={handleLogout} />
               <Routes>
+                {/* 1. New dedicated Upload Route */}
+                <Route path="/upload" element={
+                  <div className="pt-24 px-4 min-h-screen">
+                    {user && !user.isGuest ? (
+                      <UploadMedia user={user} />
+                    ) : (
+                      <div className="text-center text-white mt-10">Guests cannot upload content.</div>
+                    )}
+                  </div>
+                } />
+
+                {/* 2. Modified Home Route (Removed UploadMedia) */}
                 <Route path="/" element={
                   <main className="pt-20">
-                    {user && !user.isGuest && <UploadMedia user={user} />}
                     
                     {selectedVideo ? (
                       <VideoPlayer 
@@ -187,7 +192,6 @@ export default function App() {
                       />
                     )}
 
-                    {/* Use loading and error to satisfy linter */}
                     {loading && <div className="text-center p-4">Loading content...</div>}
                     {error && <div className="text-center text-red-500 p-4">{error}</div>}
                   </main>
