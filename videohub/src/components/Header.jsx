@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { LogOut, User, Settings, HelpCircle, MessageSquare, Shield, FileText, Headphones, Wrench } from 'lucide-react';
+// Added PlusSquare to imports
+import { LogOut, User, Settings, HelpCircle, MessageSquare, Shield, FileText, Headphones, Wrench, PlusSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Header({ user, userProfile, onLogout }) {
@@ -12,9 +13,13 @@ export default function Header({ user, userProfile, onLogout }) {
     navigate('/profile');
     setDropdownOpen(false);
   };
+  
+  // New handler for Upload
+  const handleUploadClick = () => {
+    navigate('/upload');
+  };
 
   const handleHelpCenter = () => {
-    // For now, just close dropdown. Could open a modal.
     setDropdownOpen(false);
     alert('Help Center - Coming Soon!');
   };
@@ -135,11 +140,33 @@ export default function Header({ user, userProfile, onLogout }) {
         </div>
         
         <div className="flex items-center gap-4">
+           {/* Added Upload Button here */}
+           {user && !user.isGuest && (
+            <button
+              onClick={handleUploadClick}
+              className="hidden md:flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg border border-gray-600 transition-colors"
+              title="Upload"
+            >
+              <PlusSquare size={20} className="text-blue-400" />
+              <span>Create</span>
+            </button>
+          )}
+
+          {/* Mobile Upload Icon (visible only on small screens) */}
+          {user && !user.isGuest && (
+             <button
+             onClick={handleUploadClick}
+             className="md:hidden p-2 text-white hover:text-blue-400"
+           >
+             <PlusSquare size={24} />
+           </button>
+          )}
+
           <a
             href="https://desihub.store"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200 hidden sm:block"
           >
             Store
           </a>
@@ -150,7 +177,7 @@ export default function Header({ user, userProfile, onLogout }) {
               className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200 flex items-center gap-2"
             >
               <LogOut size={18} />
-              Logout
+              <span className="hidden sm:inline">Logout</span>
             </button>
           )}
         </div>
