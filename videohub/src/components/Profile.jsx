@@ -40,7 +40,7 @@ export default function Profile({ user, userProfile }) {
     } finally {
       setLoading(false);
     }
-  }, [activeTab, user?.id, userProfile]);
+  }, [activeTab, user, userProfile]);
 
   useEffect(() => {
     if (user) {

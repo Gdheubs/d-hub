@@ -101,11 +101,17 @@ export default function App() {
       setUser(session?.user || null);
       if (session?.user) {
         try {
-          const { data: profile } = await supabase
+          const { data: profile, error } = await supabase
             .from('profiles').select('*').eq('id', session.user.id).single();
-          setUserProfile(profile || { id: session.user.id, name: session.user.email?.split('@')[0] });
+          if (error) {
+            console.error('Profile fetch error on auth change:', error);
+            setUserProfile({ id: session.user.id, name: session.user.email?.split('@')[0] });
+          } else {
+            setUserProfile(profile || { id: session.user.id, name: session.user.email?.split('@')[0] });
+          }
         } catch (err) {
           console.error('Error loading profile on auth change:', err);
+          setUserProfile({ id: session.user.id, name: session.user.email?.split('@')[0] });
         }
       }
       setAuthLoading(false);
