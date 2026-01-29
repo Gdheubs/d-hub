@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../supabaseClient';
 import { User, Settings, Grid, Heart, Clock } from 'lucide-react';
 import VideoGrid from './VideoGrid';
@@ -8,13 +8,7 @@ export default function Profile({ user, userProfile }) {
   const [userVideos, setUserVideos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (user) {
-      fetchUserContent();
-    }
-  }, [user, activeTab]);
-
-  const fetchUserContent = async () => {
+  const fetchUserContent = useCallback(async () => {
     setLoading(true);
     try {
       let data, error;
@@ -42,12 +36,22 @@ export default function Profile({ user, userProfile }) {
       setUserVideos(videosWithProfile);
     } catch (err) {
       console.error('Error fetching profile content:', err);
+      setUserVideos([]); // Set empty array on error to prevent crashes
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTab, user?.id, userProfile]);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserContent();
+    }
+  }, [user, fetchUserContent]);
 
   if (!user) return <div className="text-center mt-20 text-white">Please log in to view profile.</div>;
+
+  // Add debugging
+  console.log('Profile loaded - User:', user?.id, 'Profile:', userProfile, 'Videos:', userVideos.length);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -62,8 +66,8 @@ export default function Profile({ user, userProfile }) {
         </div>
         
         <div className="flex-1 text-center md:text-left">
-          <h1 className="text-3xl font-bold text-white mb-2">{user.name}</h1>
-          <p className="text-gray-400 mb-4">{user.email}</p>
+          <h1 className="text-3xl font-bold text-white mb-2">{user?.name || 'User'}</h1>
+          <p className="text-gray-400 mb-4">{user?.email || 'No email'}</p>
           <div className="flex flex-wrap justify-center md:justify-start gap-4">
             <div className="bg-gray-900/50 px-4 py-2 rounded-lg border border-gray-700">
               <span className="block text-xl font-bold text-blue-400">{userVideos.length}</span>

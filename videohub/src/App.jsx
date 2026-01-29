@@ -17,6 +17,7 @@ export const AuthContext = createContext();
 export default function App() {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState(null);
   const [ageVerified, setAgeVerified] = useState(() => localStorage.getItem('ageVerified') === 'true');
   const [user, setUser] = useState(null);
@@ -78,15 +79,35 @@ export default function App() {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) {
-        const { data: profile } = await supabase
-          .from('profiles').select('*').eq('id', session.user.id).single();
-        setUserProfile(profile);
+        try {
+          const { data: profile, error } = await supabase
+            .from('profiles').select('*').eq('id', session.user.id).single();
+          if (error) {
+            console.error('Profile fetch error:', error);
+            // Set a basic profile even if fetch fails
+            setUserProfile({ id: session.user.id, name: session.user.email?.split('@')[0] });
+          } else {
+            setUserProfile(profile);
+          }
+        } catch (err) {
+          console.error('Error loading profile:', err);
+          setUserProfile({ id: session.user.id, name: session.user.email?.split('@')[0] });
+        }
       }
       setAuthLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setUser(session?.user || null);
+      if (session?.user) {
+        try {
+          const { data: profile } = await supabase
+            .from('profiles').select('*').eq('id', session.user.id).single();
+          setUserProfile(profile || { id: session.user.id, name: session.user.email?.split('@')[0] });
+        } catch (err) {
+          console.error('Error loading profile on auth change:', err);
+        }
+      }
       setAuthLoading(false);
     });
     return () => subscription.unsubscribe();
