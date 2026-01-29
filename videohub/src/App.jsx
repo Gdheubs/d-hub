@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext, useCallback } from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'; // Added Navigate
 import { supabase } from './supabaseClient';
 import Header from './components/Header';
 import AgeVerificationModal from './components/AgeVerificationModal';
@@ -10,6 +10,7 @@ import TermsModal from './components/TermsModal';
 import AboutModal from './components/AboutModal';
 import LoginSignup from './components/LoginSignup';
 import UploadMedia from './components/UploadMedia';
+import Profile from './components/Profile'; // ✅ IMPORT ADDED
 
 export const AuthContext = createContext();
 
@@ -29,7 +30,7 @@ export default function App() {
   const [showTerms, setShowTerms] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
 
-  // ... [Keep existing useCallback/loadUserData logic] ...
+  // Load User Data Logic
   const loadUserData = useCallback(async () => {
     if (!user) return;
     try {
@@ -43,7 +44,7 @@ export default function App() {
     }
   }, [user]);
 
-  // ... [Keep existing useEffect hooks for fetching posts and auth] ...
+  // Fetch Posts Logic
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -79,6 +80,7 @@ export default function App() {
     fetchPosts();
   }, []);
 
+  // Auth Logic
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       setUser(session?.user ?? null);
@@ -103,6 +105,7 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Real-time
   useEffect(() => {
     const likesSubscription = supabase
       .channel('public:user_likes')
@@ -163,17 +166,25 @@ export default function App() {
                 {/* 1. New dedicated Upload Route */}
                 <Route path="/upload" element={
                   <div className="pt-24 px-4 min-h-screen">
-                    {user && !user.isGuest ? (
-                      <UploadMedia user={user} />
-                    ) : (
-                      <div className="text-center text-white mt-10">Guests cannot upload content.</div>
-                    )}
+                     {user && !user.isGuest ? (
+                       <UploadMedia user={user} />
+                     ) : (
+                       <div className="text-center mt-10">Guests cannot upload content.</div>
+                     )}
                   </div>
                 } />
 
-                {/* 2. Modified Home Route (Removed UploadMedia) */}
+                {/* 2. ✅ FIXED: Profile Route Added */}
+                <Route path="/profile" element={
+                  <div className="pt-24 px-4">
+                    <Profile user={user} userProfile={userProfile} />
+                  </div>
+                } />
+
+                {/* 3. Home Route (Upload removed) */}
                 <Route path="/" element={
                   <main className="pt-20">
+                    {/* UploadMedia REMOVED from here */}
                     
                     {selectedVideo ? (
                       <VideoPlayer 
@@ -196,6 +207,9 @@ export default function App() {
                     {error && <div className="text-center text-red-500 p-4">{error}</div>}
                   </main>
                 } />
+                
+                {/* Fallback for unknown routes */}
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
               <Footer onTermsClick={() => setShowTerms(true)} onAboutClick={() => setShowAbout(true)} />
               {showTerms && <TermsModal onClose={() => setShowTerms(false)} />}
