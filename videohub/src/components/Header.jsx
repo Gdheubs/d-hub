@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// Added PlusSquare to imports
 import { LogOut, User, Settings, HelpCircle, MessageSquare, Shield, FileText, Headphones, Wrench, PlusSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,7 +13,7 @@ export default function Header({ user, userProfile, onLogout }) {
     setDropdownOpen(false);
   };
   
-  // New handler for Upload
+  // New handler for Upload page
   const handleUploadClick = () => {
     navigate('/upload');
   };
@@ -133,26 +132,26 @@ export default function Header({ user, userProfile, onLogout }) {
         </div>
         
         <div className="flex-1 flex justify-center">
-          <h1 className="text-3xl font-bold">
+          <h1 className="text-3xl font-bold cursor-pointer" onClick={() => navigate('/')}>
             <span className="text-blue-400">Desi</span>
             <span className="text-white">Hub</span>
           </h1>
         </div>
         
         <div className="flex items-center gap-4">
-           {/* Added Upload Button here */}
+           {/* New Upload Button */}
            {user && !user.isGuest && (
             <button
               onClick={handleUploadClick}
               className="hidden md:flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg border border-gray-600 transition-colors"
-              title="Upload"
+              title="Create Post"
             >
               <PlusSquare size={20} className="text-blue-400" />
               <span>Create</span>
             </button>
           )}
 
-          {/* Mobile Upload Icon (visible only on small screens) */}
+          {/* Mobile Upload Icon */}
           {user && !user.isGuest && (
              <button
              onClick={handleUploadClick}
