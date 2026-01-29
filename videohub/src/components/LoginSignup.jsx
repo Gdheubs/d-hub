@@ -40,14 +40,16 @@ export default function LoginSignup({ onLogin, onGuest }) {
         }
 
         const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              name: name,
-            }
-          }
-        });
+  email,
+  password,
+  options: {
+    data: {
+      name: name,
+    },
+    // This tells Supabase to redirect back to the current domain (whether localhost or live)
+    emailRedirectTo: window.location.origin 
+  }
+});
         if (error) throw error;
         setError('Check your email for the confirmation link!');
       }
